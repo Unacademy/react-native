@@ -262,6 +262,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   public void fling(int velocityY) {
+    final int correctedVelocityY = (int)(Math.abs(velocityY) * Math.signum(mOnScrollDispatchHelper.getYFlingVelocity()));
     if (mScroller != null) {
       // FB SCROLLVIEW CHANGE
 
@@ -277,7 +278,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
         getScrollX(),
         getScrollY(),
         0,
-        velocityY,
+        correctedVelocityY,
         0,
         0,
         0,
@@ -289,13 +290,13 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
       // END FB SCROLLVIEW CHANGE
     } else {
-      super.fling(velocityY);
+      super.fling(correctedVelocityY);
     }
 
     if (mSendMomentumEvents || isScrollPerfLoggingEnabled()) {
       mFlinging = true;
       enableFpsListener();
-      ReactScrollViewHelper.emitScrollMomentumBeginEvent(this, 0, velocityY);
+      ReactScrollViewHelper.emitScrollMomentumBeginEvent(this, 0, correctedVelocityY);
       Runnable r = new Runnable() {
         @Override
         public void run() {
