@@ -776,7 +776,13 @@ public class UIManagerModule extends ReactContextBaseJavaModule
         .arg("BatchId", batchId)
         .flush();
     for (UIManagerModuleListener listener : mListeners) {
-      listener.willDispatchViewUpdates(this);
+      try {
+        if (listener != null) {
+          listener.willDispatchViewUpdates(this);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
     try {
       mUIImplementation.dispatchViewUpdates(batchId);
