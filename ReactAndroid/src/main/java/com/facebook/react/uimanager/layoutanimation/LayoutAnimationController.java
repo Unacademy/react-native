@@ -86,8 +86,8 @@ public class LayoutAnimationController {
     // resume when view is re-attached to parent, which is the standard android animation behavior.
     // If there's a layout handling animation going on, it should be animated nonetheless since the
     // ongoing animation needs to be updated.
-    return (mShouldAnimateLayout && viewToAnimate.getParent() != null)
-        || mLayoutHandlers.get(viewToAnimate.getId()) != null;
+    return viewToAnimate != null && ((mShouldAnimateLayout && viewToAnimate.getParent() != null)
+        || mLayoutHandlers.get(viewToAnimate.getId()) != null);
   }
 
   /**
