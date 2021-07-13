@@ -522,17 +522,21 @@ public class ReactViewGroup extends ViewGroup
     Assertions.assertCondition(mRemoveClippedSubviews);
     Assertions.assertNotNull(mClippingRect);
     Assertions.assertNotNull(mAllChildren);
-    addInArray(child, index);
-    // we add view as "clipped" and then run {@link #updateSubviewClipStatus} to conditionally
-    // attach it
-    int clippedSoFar = 0;
-    for (int i = 0; i < index; i++) {
-      if (mAllChildren[i].getParent() == null) {
-        clippedSoFar++;
+    try {
+      addInArray(child, index);
+      // we add view as "clipped" and then run {@link #updateSubviewClipStatus} to conditionally
+      // attach it
+      int clippedSoFar = 0;
+      for (int i = 0; i < index; i++) {
+        if (mAllChildren[i].getParent() == null) {
+          clippedSoFar++;
+        }
       }
+      updateSubviewClipStatus(mClippingRect, index, clippedSoFar);
+      child.addOnLayoutChangeListener(mChildrenLayoutChangeListener);
+    } catch (Exception e) {
+      //catching IndexOutOfBoundsException intstead of crashing when adding children
     }
-    updateSubviewClipStatus(mClippingRect, index, clippedSoFar);
-    child.addOnLayoutChangeListener(mChildrenLayoutChangeListener);
   }
 
   /*package*/ void removeViewWithSubviewClippingEnabled(View view) {
