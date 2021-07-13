@@ -454,7 +454,9 @@ public class NativeViewHierarchyManager {
           // The view will be removed and dropped by the 'delete' layout animation
           // instead, so do nothing
         } else {
-          viewManager.removeViewAt(viewToManage, normalizedIndexToRemove);
+          if(!mLayoutAnimationEnabled) {
+            viewManager.removeViewAt(viewToManage, normalizedIndexToRemove);
+          }
         }
 
         lastIndexToRemove = indexToRemove;
